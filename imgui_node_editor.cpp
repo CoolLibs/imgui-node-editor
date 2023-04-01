@@ -9,16 +9,16 @@
 // CREDITS
 //   Written by Michal Cichon
 //------------------------------------------------------------------------------
-# include "imgui_node_editor_internal.h"
-# include <cstdio> // snprintf
-# include <string>
-# include <fstream>
-# include <bitset>
-# include <climits>
-# include <algorithm>
-# include <sstream>
-# include <streambuf>
-# include <type_traits>
+#include <algorithm>
+#include <bitset>
+#include <climits>
+#include <cstdio> // snprintf
+#include <fstream>
+#include <sstream>
+#include <streambuf>
+#include <string>
+#include <type_traits>
+#include "imgui_node_editor_internal.h"
 
 // https://stackoverflow.com/a/8597498
 # define DECLARE_HAS_NESTED(Name, Member)                                          \
@@ -57,18 +57,18 @@ namespace Detail {
         }                                                                                           \
     }
 
-DECLARE_KEY_TESTER(ImGuiKey_F);
-DECLARE_KEY_TESTER(ImGuiKey_D);
+// DECLARE_KEY_TESTER(ImGuiKey::ImGuiKey_F);
+// DECLARE_KEY_TESTER(ImGuiKey::ImGuiKey_D);
 
-static inline int GetKeyIndexForF()
-{
-    return KeyTester_ImGuiKey_F::Get<ImGuiKey_>(nullptr);
-}
+// static inline int GetKeyIndexForF()
+// {
+//     return KeyTester_ImGuiKey_F::Get<ImGuiKey_>(nullptr);
+// }
 
-static inline int GetKeyIndexForD()
-{
-    return KeyTester_ImGuiKey_D::Get<ImGuiKey_>(nullptr);
-}
+// static inline int GetKeyIndexForD()
+// {
+//     return KeyTester_ImGuiKey_D::Get<ImGuiKey_>(nullptr);
+// }
 
 } // namespace Detail
 } // namespace NodeEditor
@@ -3314,7 +3314,7 @@ ed::EditorAction::AcceptResult ed::NavigateAction::Accept(const Control& control
 
     auto& io = ImGui::GetIO();
 
-    if (Editor->CanAcceptUserInput() && ImGui::IsKeyPressed(GetKeyIndexForF()) && Editor->AreShortcutsEnabled())
+    if (Editor->CanAcceptUserInput() && ImGui::IsKeyPressed(ImGuiKey_F) && Editor->AreShortcutsEnabled())
     {
         const auto zoomMode = io.KeyShift ? NavigateAction::ZoomMode::WithMargin : NavigateAction::ZoomMode::None;
 
@@ -4353,7 +4353,7 @@ ed::EditorAction::AcceptResult ed::ShortcutAction::Accept(const Control& control
         candidateAction = Copy;
     if (io.KeyCtrl && !io.KeyShift && !io.KeyAlt && ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_V)))
         candidateAction = Paste;
-    if (io.KeyCtrl && !io.KeyShift && !io.KeyAlt && ImGui::IsKeyPressed(GetKeyIndexForD()))
+    if (io.KeyCtrl && !io.KeyShift && !io.KeyAlt && ImGui::IsKeyPressed(ImGuiKey_D))
         candidateAction = Duplicate;
     if (!io.KeyCtrl && !io.KeyShift && !io.KeyAlt && ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_Space)))
         candidateAction = CreateNode;
