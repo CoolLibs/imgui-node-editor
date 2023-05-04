@@ -10,7 +10,7 @@
 //   Written by Michal Cichon
 //------------------------------------------------------------------------------
 # include "imgui_node_editor_internal.h"
-# include <algorithm>
+#include <algorithm>
 
 
 //------------------------------------------------------------------------------
@@ -18,7 +18,7 @@ static ax::NodeEditor::Detail::EditorContext* s_Editor = nullptr;
 
 
 //------------------------------------------------------------------------------
-template <typename C, typename I, typename F>
+template<typename C, typename I, typename F>
 static int BuildIdList(C& container, I* list, int listSize, F&& accept)
 {
     if (list != nullptr)
@@ -95,42 +95,43 @@ ax::NodeEditor::EditorContext* ax::NodeEditor::GetCurrentEditor()
 
 ax::NodeEditor::Style& ax::NodeEditor::GetStyle()
 {
-    return s_Editor->GetStyle();
+    static ax::NodeEditor::Detail::Style style{};
+    return style;
 }
 
 const char* ax::NodeEditor::GetStyleColorName(StyleColor colorIndex)
 {
-    return s_Editor->GetStyle().GetColorName(colorIndex);
+    return reinterpret_cast<ax::NodeEditor::Detail::Style&>(GetStyle()).GetColorName(colorIndex);
 }
 
 void ax::NodeEditor::PushStyleColor(StyleColor colorIndex, const ImVec4& color)
 {
-    s_Editor->GetStyle().PushColor(colorIndex, color);
+    reinterpret_cast<ax::NodeEditor::Detail::Style&>(GetStyle()).PushColor(colorIndex, color);
 }
 
 void ax::NodeEditor::PopStyleColor(int count)
 {
-    s_Editor->GetStyle().PopColor(count);
+    reinterpret_cast<ax::NodeEditor::Detail::Style&>(GetStyle()).PopColor(count);
 }
 
 void ax::NodeEditor::PushStyleVar(StyleVar varIndex, float value)
 {
-    s_Editor->GetStyle().PushVar(varIndex, value);
+    reinterpret_cast<ax::NodeEditor::Detail::Style&>(GetStyle()).PushVar(varIndex, value);
 }
 
 void ax::NodeEditor::PushStyleVar(StyleVar varIndex, const ImVec2& value)
 {
-    s_Editor->GetStyle().PushVar(varIndex, value);
+    reinterpret_cast<ax::NodeEditor::Detail::Style&>(GetStyle()).PushVar(varIndex, value);
 }
 
 void ax::NodeEditor::PushStyleVar(StyleVar varIndex, const ImVec4& value)
 {
-    s_Editor->GetStyle().PushVar(varIndex, value);
+    reinterpret_cast<ax::NodeEditor::Detail::Style&>(GetStyle()).PushVar(varIndex, value);
 }
 
 void ax::NodeEditor::PopStyleVar(int count)
 {
-    s_Editor->GetStyle().PopVar(count);
+    reinterpret_cast<ax::NodeEditor::Detail::Style&>(GetStyle()).PopVar(count);
 }
 
 void ax::NodeEditor::Begin(const char* id, const ImVec2& size)
@@ -231,7 +232,7 @@ ImDrawList* ax::NodeEditor::GetNodeBackgroundDrawList(NodeId nodeId)
         return nullptr;
 }
 
-bool ax::NodeEditor::Link(LinkId id, PinId startPinId, PinId endPinId, const ImVec4& color/* = ImVec4(1, 1, 1, 1)*/, float thickness/* = 1.0f*/)
+bool ax::NodeEditor::Link(LinkId id, PinId startPinId, PinId endPinId, const ImVec4& color /* = ImVec4(1, 1, 1, 1)*/, float thickness /* = 1.0f*/)
 {
     return s_Editor->DoLink(id, startPinId, endPinId, ImColor(color), thickness);
 }

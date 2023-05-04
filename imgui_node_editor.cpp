@@ -684,7 +684,7 @@ void ed::Node::Draw(ImDrawList* drawList, DrawFlags flags)
     else if (flags & Selected)
     {
         const auto  borderColor = Editor->GetColor(StyleColor_SelNodeBorder);
-        const auto& editorStyle = Editor->GetStyle();
+        const auto& editorStyle = GetStyle();
 
         drawList->ChannelsSetCurrent(m_Channel + c_NodeBaseChannel);
 
@@ -693,7 +693,7 @@ void ed::Node::Draw(ImDrawList* drawList, DrawFlags flags)
     else if (!IsGroup(this) && (flags & Hovered))
     {
         const auto  borderColor = Editor->GetColor(StyleColor_HovNodeBorder);
-        const auto& editorStyle = Editor->GetStyle();
+        const auto& editorStyle = GetStyle();
 
         drawList->ChannelsSetCurrent(m_Channel + c_NodeBaseChannel);
 
@@ -1061,7 +1061,6 @@ ed::EditorContext::EditorContext(const ax::NodeEditor::Config* config)
     , m_IsHovered(false)
     , m_IsHoveredWithoutOverlapp(false)
     , m_ShortcutsEnabled(true)
-    , m_Style()
     , m_Nodes()
     , m_Pins()
     , m_Links()
@@ -2213,12 +2212,12 @@ ed::Link* ed::EditorContext::FindLinkAt(const ImVec2& p)
 
 ImU32 ed::EditorContext::GetColor(StyleColor colorIndex) const
 {
-    return ImColor(m_Style.Colors[colorIndex]);
+    return ImColor(GetStyle().Colors[colorIndex]);
 }
 
 ImU32 ed::EditorContext::GetColor(StyleColor colorIndex, float alpha) const
 {
-    auto color = m_Style.Colors[colorIndex];
+    auto color = GetStyle().Colors[colorIndex];
     return ImColor(color.x, color.y, color.z, color.w * alpha);
 }
 
@@ -5198,7 +5197,7 @@ void ed::NodeBuilder::Begin(NodeId nodeId)
     // Position node on screen
     ImGui::SetCursorScreenPos(m_CurrentNode->m_Bounds.Min);
 
-    auto& editorStyle = Editor->GetStyle();
+    auto& editorStyle = GetStyle();
 
     const auto alpha = ImGui::GetStyle().Alpha;
 
@@ -5250,7 +5249,7 @@ void ed::NodeBuilder::End()
 
     // Apply frame padding. This must be done in this convoluted way if outer group
     // size must contain inner group padding.
-    auto& editorStyle = Editor->GetStyle();
+    auto& editorStyle = GetStyle();
     if (editorStyle.NodePadding.x != 0 || editorStyle.NodePadding.y != 0 || editorStyle.NodePadding.z != 0 || editorStyle.NodePadding.w != 0)
     {
         ImGui::EndGroup();
@@ -5295,7 +5294,7 @@ void ed::NodeBuilder::BeginPin(PinId pinId, PinKind kind)
     IM_ASSERT(nullptr == m_CurrentPin);
     IM_ASSERT(false   == m_IsGroup);
 
-    auto& editorStyle = Editor->GetStyle();
+    auto& editorStyle = GetStyle();
 
     m_CurrentPin = Editor->GetPin(pinId, kind);
     m_CurrentPin->m_Node = m_CurrentNode;

@@ -1292,8 +1292,6 @@ struct EditorContext
 
     const Config& GetConfig() const { return m_Config; }
 
-    Style& GetStyle() { return m_Style; }
-
     void Begin(const char* id, const ImVec2& size = ImVec2(0, 0));
     void End();
 
@@ -1488,8 +1486,6 @@ private:
     bool                m_IsHoveredWithoutOverlapp;
 
     bool                m_ShortcutsEnabled;
-
-    Style               m_Style;
 
     vector<ObjectWrapper<Node>> m_Nodes;
     vector<ObjectWrapper<Pin>>  m_Pins;
