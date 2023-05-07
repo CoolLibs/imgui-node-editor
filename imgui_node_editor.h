@@ -18,6 +18,8 @@
 # include <imgui.h>
 # include <cstdint> // std::uintXX_t
 # include <utility> // std::move
+# include <string>
+# include <optional>
 
 
 //------------------------------------------------------------------------------
@@ -85,20 +87,20 @@ struct Config
 {
     using CanvasSizeModeAlias = ax::NodeEditor::CanvasSizeMode;
 
-    const char*             SettingsFile;
-    ConfigSession           BeginSaveSession;
-    ConfigSession           EndSaveSession;
-    ConfigSaveSettings      SaveSettings;
-    ConfigLoadSettings      LoadSettings;
-    ConfigSaveNodeSettings  SaveNodeSettings;
-    ConfigLoadNodeSettings  LoadNodeSettings;
-    void*                   UserPointer;
-    ImVector<float>         CustomZoomLevels;
-    CanvasSizeModeAlias     CanvasSizeMode;
-    int                     DragButtonIndex;        // Mouse button index drag action will react to (0-left, 1-right, 2-middle)
-    int                     SelectButtonIndex;      // Mouse button index select action will react to (0-left, 1-right, 2-middle)
-    int                     NavigateButtonIndex;    // Mouse button index navigate action will react to (0-left, 1-right, 2-middle)
-    int                     ContextMenuButtonIndex; // Mouse button index context menu action will react to (0-left, 1-right, 2-middle)
+    std::optional<std::string> SettingsFile;
+    ConfigSession              BeginSaveSession;
+    ConfigSession              EndSaveSession;
+    ConfigSaveSettings         SaveSettings;
+    ConfigLoadSettings         LoadSettings;
+    ConfigSaveNodeSettings     SaveNodeSettings;
+    ConfigLoadNodeSettings     LoadNodeSettings;
+    void*                      UserPointer;
+    ImVector<float>            CustomZoomLevels;
+    CanvasSizeModeAlias        CanvasSizeMode;
+    int                        DragButtonIndex;        // Mouse button index drag action will react to (0-left, 1-right, 2-middle)
+    int                        SelectButtonIndex;      // Mouse button index select action will react to (0-left, 1-right, 2-middle)
+    int                        NavigateButtonIndex;    // Mouse button index navigate action will react to (0-left, 1-right, 2-middle)
+    int                        ContextMenuButtonIndex; // Mouse button index context menu action will react to (0-left, 1-right, 2-middle)
 
     Config()
         : SettingsFile("NodeEditor.json")

@@ -5737,7 +5737,7 @@ std::string ed::Config::Load()
     }
     else if (SettingsFile)
     {
-        std::ifstream file(SettingsFile);
+        std::ifstream file(*SettingsFile);
         if (file)
         {
             file.seekg(0, std::ios_base::end);
@@ -5783,7 +5783,7 @@ bool ed::Config::Save(const std::string& data, SaveReasonFlags flags)
     }
     else if (SettingsFile)
     {
-        std::ofstream settingsFile(SettingsFile);
+        std::ofstream settingsFile(*SettingsFile);
         if (settingsFile)
             settingsFile << data;
 
