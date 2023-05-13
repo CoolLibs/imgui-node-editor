@@ -147,23 +147,20 @@ using ax::NodeEditor::NodeId;
 using ax::NodeEditor::PinId;
 using ax::NodeEditor::LinkId;
 
-struct ObjectId final: Details::SafePointerType<ObjectId>
+struct ObjectId final: MyIDType
 {
-    using Super = Details::SafePointerType<ObjectId>;
-    using Super::Super;
-
-    ObjectId():                  Super(Invalid),              m_Type(ObjectType::None)   {}
-    ObjectId(PinId  pinId):      Super(pinId.AsPointer()),    m_Type(ObjectType::Pin)    {}
-    ObjectId(NodeId nodeId):     Super(nodeId.AsPointer()),   m_Type(ObjectType::Node)   {}
-    ObjectId(LinkId linkId):     Super(linkId.AsPointer()),   m_Type(ObjectType::Link)   {}
+    ObjectId():                  MyIDType{},            m_Type(ObjectType::None)   {}
+    ObjectId(PinId  pinId):      MyIDType{pinId.id},    m_Type(ObjectType::Pin)    {}
+    ObjectId(NodeId nodeId):     MyIDType{nodeId.id},   m_Type(ObjectType::Node)   {}
+    ObjectId(LinkId linkId):     MyIDType{linkId.id},   m_Type(ObjectType::Link)   {}
 
     explicit operator PinId()    const { return AsPinId();    }
     explicit operator NodeId()   const { return AsNodeId();   }
     explicit operator LinkId()   const { return AsLinkId();   }
 
-    PinId    AsPinId()    const { IM_ASSERT(IsPinId());    return PinId(AsPointer());    }
-    NodeId   AsNodeId()   const { IM_ASSERT(IsNodeId());   return NodeId(AsPointer());   }
-    LinkId   AsLinkId()   const { IM_ASSERT(IsLinkId());   return LinkId(AsPointer());   }
+    PinId    AsPinId()    const { IM_ASSERT(IsPinId());    return PinId{id};    }
+    NodeId   AsNodeId()   const { IM_ASSERT(IsNodeId());   return NodeId{id};   }
+    LinkId   AsLinkId()   const { IM_ASSERT(IsLinkId());   return LinkId{id};   }
 
     bool IsPinId()    const { return m_Type == ObjectType::Pin;    }
     bool IsNodeId()   const { return m_Type == ObjectType::Node;   }
@@ -195,7 +192,7 @@ struct ObjectWrapper
 
     bool operator<(const ObjectWrapper& rhs) const
     {
-        return m_ID.AsPointer() < rhs.m_ID.AsPointer();
+        return m_ID < rhs.m_ID;
     }
 };
 

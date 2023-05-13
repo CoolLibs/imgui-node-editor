@@ -18,8 +18,8 @@ static ax::NodeEditor::Detail::EditorContext* s_Editor = nullptr;
 
 
 //------------------------------------------------------------------------------
-template<typename C, typename I, typename F>
-static int BuildIdList(C& container, I* list, int listSize, F&& accept)
+template<typename Container, typename ListElement, typename Predicate>
+static int BuildIdList(Container& container, ListElement* list, int listSize, Predicate&& accept)
 {
     if (list != nullptr)
     {
@@ -31,9 +31,10 @@ static int BuildIdList(C& container, I* list, int listSize, F&& accept)
 
             if (accept(object))
             {
-                list[count] = I(object->ID().AsPointer());
+                list[count] = ListElement(object->ID());
                 ++count;
-                --listSize;}
+                --listSize;
+            }
         }
 
         return count;

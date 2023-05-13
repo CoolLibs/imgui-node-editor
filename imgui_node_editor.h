@@ -26,6 +26,7 @@
 # define IMGUI_NODE_EDITOR_VERSION      "0.9.2"
 # define IMGUI_NODE_EDITOR_VERSION_NUM  000902
 
+#include "ID.h"
 
 //------------------------------------------------------------------------------
 namespace ax {
@@ -33,10 +34,15 @@ namespace NodeEditor {
 
 
 //------------------------------------------------------------------------------
-struct NodeId;
-struct LinkId;
-struct PinId;
-
+struct NodeId : public MyIDType {
+    using MyIDType::MyIDType;
+};
+struct LinkId : public MyIDType {
+    using MyIDType::MyIDType;
+};
+struct PinId : public MyIDType {
+    using MyIDType::MyIDType;
+};
 
 //------------------------------------------------------------------------------
 enum class PinKind
@@ -486,21 +492,6 @@ inline bool operator!=(const SafePointerType<Tag>& lhs, const SafePointerType<Ta
 }
 
 } // namespace Details
-
-struct NodeId final: Details::SafePointerType<NodeId>
-{
-    using SafePointerType::SafePointerType;
-};
-
-struct LinkId final: Details::SafePointerType<LinkId>
-{
-    using SafePointerType::SafePointerType;
-};
-
-struct PinId final: Details::SafePointerType<PinId>
-{
-    using SafePointerType::SafePointerType;
-};
 
 
 //------------------------------------------------------------------------------
