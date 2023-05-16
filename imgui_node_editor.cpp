@@ -683,12 +683,11 @@ void ed::Node::Draw(ImDrawList* drawList, DrawFlags flags)
     }
     else if (flags & Selected)
     {
-        const auto  borderColor = Editor->GetColor(StyleColor_SelNodeBorder);
         const auto& editorStyle = GetStyle();
 
         drawList->ChannelsSetCurrent(m_Channel + c_NodeBaseChannel);
 
-        DrawBorder(drawList, borderColor, editorStyle.SelectedNodeBorderWidth);
+        DrawBorder(drawList, m_SelectedBorderColor, editorStyle.SelectedNodeBorderWidth);
     }
     else if (!IsGroup(this) && (flags & Hovered))
     {
@@ -5160,6 +5159,7 @@ void ed::NodeBuilder::Begin(NodeId nodeId)
     IM_ASSERT(nullptr == m_CurrentNode);
 
     m_CurrentNode = Editor->GetNode(nodeId);
+    m_CurrentNode->m_SelectedBorderColor = Editor->GetColor(StyleColor_SelNodeBorder);
 
     Editor->UpdateNodeState(m_CurrentNode);
 

@@ -389,6 +389,7 @@ struct Node final: Object
 
     ImU32    m_Color;
     ImU32    m_BorderColor;
+    ImU32    m_SelectedBorderColor{};
     float    m_BorderWidth;
     float    m_Rounding;
 
