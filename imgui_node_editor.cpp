@@ -5731,12 +5731,7 @@ std::string ed::Config::Load()
 
     if (LoadSettings)
     {
-        const auto size = LoadSettings(nullptr, UserPointer);
-        if (size > 0)
-        {
-            data.resize(size);
-            LoadSettings(const_cast<char*>(data.data()), UserPointer);
-        }
+        data = LoadSettings(UserPointer);
     }
     else if (SettingsFile)
     {
@@ -5782,7 +5777,7 @@ bool ed::Config::Save(const std::string& data, SaveReasonFlags flags)
 {
     if (SaveSettings)
     {
-        return SaveSettings(data.c_str(), data.size(), flags, UserPointer);
+        return SaveSettings(data, flags, UserPointer);
     }
     else if (SettingsFile)
     {

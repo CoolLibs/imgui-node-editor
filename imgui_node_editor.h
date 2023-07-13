@@ -75,8 +75,8 @@ enum class SaveReasonFlags: uint32_t
 inline SaveReasonFlags operator |(SaveReasonFlags lhs, SaveReasonFlags rhs) { return static_cast<SaveReasonFlags>(static_cast<uint32_t>(lhs) | static_cast<uint32_t>(rhs)); }
 inline SaveReasonFlags operator &(SaveReasonFlags lhs, SaveReasonFlags rhs) { return static_cast<SaveReasonFlags>(static_cast<uint32_t>(lhs) & static_cast<uint32_t>(rhs)); }
 
-using ConfigSaveSettings     = bool   (*)(const char* data, size_t size, SaveReasonFlags reason, void* userPointer);
-using ConfigLoadSettings     = size_t (*)(char* data, void* userPointer);
+using ConfigSaveSettings     = bool   (*)(std::string const& settings, SaveReasonFlags reason, void* userPointer);
+using ConfigLoadSettings     = std::string (*)(void* userPointer);
 
 using ConfigSaveNodeSettings = bool   (*)(NodeId nodeId, const char* data, size_t size, SaveReasonFlags reason, void* userPointer);
 using ConfigLoadNodeSettings = size_t (*)(NodeId nodeId, char* data, void* userPointer);
