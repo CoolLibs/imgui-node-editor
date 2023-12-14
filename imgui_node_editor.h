@@ -100,7 +100,7 @@ struct Config
     CanvasSizeModeAlias        CanvasSizeMode;
     int                        DragButtonIndex;        // Mouse button index drag action will react to (0-left, 1-right, 2-middle)
     int                        SelectButtonIndex;      // Mouse button index select action will react to (0-left, 1-right, 2-middle)
-    std::vector<int>           NavigateButtonIndex;    // Mouse button index navigate action will react to (0-left, 1-right, 2-middle)
+    std::vector<int>           NavigateButtonIndices;  // Mouse button index navigate action will react to (0-left, 1-right, 2-middle)
     int                        ContextMenuButtonIndex; // Mouse button index context menu action will react to (0-left, 1-right, 2-middle)
 
     Config()
@@ -116,7 +116,7 @@ struct Config
         , CanvasSizeMode(CanvasSizeModeAlias::FitVerticalView)
         , DragButtonIndex(0)
         , SelectButtonIndex(0)
-        , NavigateButtonIndex({ 1, 2 })
+        , NavigateButtonIndices({ 1, 2 })
         , ContextMenuButtonIndex(1)
     {
     }

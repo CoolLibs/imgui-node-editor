@@ -2466,11 +2466,11 @@ ed::Control ed::EditorContext::BuildControl(bool allowOffscreen)
         hotObject = FindLinkAt(mousePos);
 
     ImGuiButtonFlags backgroundExtraFlags = ImGuiButtonFlags_None;
-    if (m_Config.DragButtonIndex == 0 || m_Config.SelectButtonIndex == 0 || (std::any_of(m_Config.NavigateButtonIndex.begin(), m_Config.NavigateButtonIndex.end(), [&](int index) { return index == 0; })))
+    if (m_Config.DragButtonIndex == 0 || m_Config.SelectButtonIndex == 0 || (std::any_of(m_Config.NavigateButtonIndices.begin(), m_Config.NavigateButtonIndices.end(), [&](int index) { return index == 0; })))
         backgroundExtraFlags |= ImGuiButtonFlags_MouseButtonLeft;
-    if (m_Config.DragButtonIndex == 1 || m_Config.SelectButtonIndex == 1 || (std::any_of(m_Config.NavigateButtonIndex.begin(), m_Config.NavigateButtonIndex.end(), [&](int index) { return index == 1; })))
+    if (m_Config.DragButtonIndex == 1 || m_Config.SelectButtonIndex == 1 || (std::any_of(m_Config.NavigateButtonIndices.begin(), m_Config.NavigateButtonIndices.end(), [&](int index) { return index == 1; })))
         backgroundExtraFlags |= ImGuiButtonFlags_MouseButtonRight;
-    if (m_Config.DragButtonIndex == 2 || m_Config.SelectButtonIndex == 2 || (std::any_of(m_Config.NavigateButtonIndex.begin(), m_Config.NavigateButtonIndex.end(), [&](int index) { return index == 2; })))
+    if (m_Config.DragButtonIndex == 2 || m_Config.SelectButtonIndex == 2 || (std::any_of(m_Config.NavigateButtonIndices.begin(), m_Config.NavigateButtonIndices.end(), [&](int index) { return index == 2; })))
         backgroundExtraFlags |= ImGuiButtonFlags_MouseButtonMiddle;
 
     auto isMouseDoubleClickOverBackground = [doubleClickedObject, backgroundExtraFlags]() -> int
@@ -3302,7 +3302,7 @@ ed::EditorAction::AcceptResult ed::NavigateAction::Accept(const Control& control
     if (m_IsActive)
         return False;
 
-    for(auto buttonIndex: Editor->GetConfig().NavigateButtonIndex)
+    for (auto buttonIndex : Editor->GetConfig().NavigateButtonIndices)
     if (Editor->CanAcceptUserInput() /*&& !ImGui::IsAnyItemActive()*/
         && ImGui::IsMouseDragging(buttonIndex, 0.0f)
         && !ImGui::IsMouseDragPastThreshold(buttonIndex) // Make sure that if the dragging started on another window, we don't pick it up.
@@ -3392,26 +3392,24 @@ bool ed::NavigateAction::Process(const Control& control)
     if (!m_IsActive)
         return false;
 
-    m_IsActive = false;
-
-    for(auto buttonIndex: Editor->GetConfig().NavigateButtonIndex)
+    m_IsActive = false; // Will be set to true if at least one of the buttons is beeing used to navigate
+    for (auto buttonIndex : Editor->GetConfig().NavigateButtonIndices)
     {
-        if (ImGui::IsMouseDragging(buttonIndex, 0.0f))
-        {
-            m_ScrollDelta = ImGui::GetMouseDragDelta(buttonIndex);
-            m_Scroll      = m_ScrollStart - m_ScrollDelta * m_Zoom;
-            m_VisibleRect = GetViewRect();
+        if (!ImGui::IsMouseDragging(buttonIndex, 0.0f))
+            continue;
+        
+        m_ScrollDelta = ImGui::GetMouseDragDelta(buttonIndex);
+        m_Scroll      = m_ScrollStart - m_ScrollDelta * m_Zoom;
+        m_VisibleRect = GetViewRect();
 
-            m_IsActive = true;
-    //         if (IsActive && Animation.IsPlaying())
-    //             Animation.Target = Animation.Target - ScrollDelta * Animation.TargetZoom;
-        }
-        else
-        {
-            if (m_Scroll != m_ScrollStart)
-                Editor->MakeDirty(SaveReasonFlags::Navigation);
-        }
-
+        m_IsActive = true;
+    //  if (IsActive && Animation.IsPlaying())
+    //      Animation.Target = Animation.Target - ScrollDelta * Animation.TargetZoom;
+    }
+    if (!m_IsActive)
+    {
+        if (m_Scroll != m_ScrollStart)
+            Editor->MakeDirty(SaveReasonFlags::Navigation);
     }
 
     // #TODO: Handle zoom while scrolling
