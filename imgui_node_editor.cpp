@@ -3541,7 +3541,9 @@ bool ed::NavigateAction::MoveOverEdge(const ImVec2& canvasSize)
 
     auto& io = ImGui::GetIO();
 
-    const auto screenMousePos   = io.MousePos;
+    auto screenMousePos = io.MousePos;
+    if (screenMousePos.x < 1.f) // HACK to allow dragging even when the mouse is blocked by the edge of the screen.
+        screenMousePos.x = -100.f;
     const auto screenRect       = ImRect(ImGui::GetCursorScreenPos(), ImGui::GetCursorScreenPos() + canvasSize);
 
     // Mouse is over screen, do nothing
