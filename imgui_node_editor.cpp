@@ -708,7 +708,7 @@ void ed::Node::Draw(ImDrawList* drawList, DrawFlags flags)
 
         drawList->ChannelsSetCurrent(m_Channel + c_NodeBaseChannel);
 
-        DrawBorder(drawList, borderColor, editorStyle.HoveredNodeBorderWidth, editorStyle.HoverNodeBorderOffset);
+        DrawBorder(drawList, borderColor, editorStyle.HoveredNodeBorderWidth, editorStyle.HoveredNodeBorderOffset);
     }
 }
 
@@ -5736,7 +5736,7 @@ float* ed::Style::GetVarFloatAddr(StyleVar idx)
         case StyleVar_GroupBorderWidth:         return &GroupBorderWidth;
         case StyleVar_HighlightConnectedLinks:  return &HighlightConnectedLinks;
         case StyleVar_SnapLinkToPinDir:         return &SnapLinkToPinDir;
-        case StyleVar_HoveredNodeBorderOffset:  return &HoverNodeBorderOffset;
+        case StyleVar_HoveredNodeBorderOffset:  return &HoveredNodeBorderOffset;
         case StyleVar_SelectedNodeBorderOffset: return &SelectedNodeBorderOffset;
         default:                                return nullptr;
     }

@@ -202,7 +202,7 @@ struct Style
     float   NodeRounding;
     float   NodeBorderWidth;
     float   HoveredNodeBorderWidth;
-    float   HoverNodeBorderOffset;
+    float   HoveredNodeBorderOffset;
     float   SelectedNodeBorderWidth;
     float   SelectedNodeBorderOffset;
     float   PinRounding;
@@ -233,7 +233,7 @@ struct Style
         NodeRounding             = 12.0f;
         NodeBorderWidth          = 1.5f;
         HoveredNodeBorderWidth   = 3.5f;
-        HoverNodeBorderOffset    = 0.0f;
+        HoveredNodeBorderOffset  = 0.0f;
         SelectedNodeBorderWidth  = 3.5f;
         SelectedNodeBorderOffset = 0.0f;
         PinRounding              = 4.0f;
