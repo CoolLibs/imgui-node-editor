@@ -282,6 +282,27 @@ struct Style
         Colors[StyleColor_GroupBg]            = ImColor(  0,   0,   0, 160);
         Colors[StyleColor_GroupBorder]        = ImColor(255, 255, 255,  32);
     }
+
+    void ScaleAllSizes(float scale_factor)
+    {
+        NodePadding              *= scale_factor;
+        NodeRounding             *= scale_factor;
+        NodeBorderWidth          *= scale_factor;
+        HoveredNodeBorderWidth   *= scale_factor;
+        HoveredNodeBorderOffset  *= scale_factor;
+        SelectedNodeBorderWidth  *= scale_factor;
+        SelectedNodeBorderOffset *= scale_factor;
+        PinRounding              *= scale_factor;
+        PinBorderWidth           *= scale_factor;
+        FlowMarkerDistance       *= scale_factor;
+        PivotSize                *= scale_factor;
+        PivotScale               *= scale_factor;
+        PinRadius                *= scale_factor;
+        PinArrowSize             *= scale_factor;
+        PinArrowWidth            *= scale_factor;
+        GroupRounding            *= scale_factor;
+        GroupBorderWidth         *= scale_factor;
+    }
 };
 
 
