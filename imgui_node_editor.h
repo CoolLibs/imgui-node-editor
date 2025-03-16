@@ -11,7 +11,6 @@
 //------------------------------------------------------------------------------
 # ifndef __IMGUI_NODE_EDITOR_H__
 # define __IMGUI_NODE_EDITOR_H__
-#include <vector>
 # pragma once
 
 
@@ -21,6 +20,8 @@
 # include <utility> // std::move
 # include <string>
 # include <optional>
+# include <vector>
+# include <array>
 
 
 //------------------------------------------------------------------------------
@@ -225,7 +226,7 @@ struct Style
     float   GroupBorderWidth;
     float   HighlightConnectedLinks;
     float   SnapLinkToPinDir; // when true link will start on the line defined by pin direction
-    ImVec4  Colors[StyleColor_Count];
+    std::array<ImVec4, StyleColor_Count> Colors;
 
     Style()
     {
