@@ -40,47 +40,11 @@ namespace ax {
 namespace NodeEditor {
 namespace Detail {
 
-// # if !defined(IMGUI_VERSION_NUM) || (IMGUI_VERSION_NUM < 18822)
-// # define DECLARE_KEY_TESTER(Key)                                                                    \
-//     DECLARE_HAS_NESTED(Key, Key)                                                                    \
-//     struct KeyTester_ ## Key                                                                        \
-//     {                                                                                               \
-//         template <typename T>                                                                       \
-//         static int Get(typename std::enable_if<has_nested_ ## Key<ImGuiKey_>::value, T>::type*)     \
-//         {                                                                                           \
-//             return ImGui::GetKeyIndex(T::Key);                                                      \
-//         }                                                                                           \
-//                                                                                                     \
-//         template <typename T>                                                                       \
-//         static int Get(typename std::enable_if<!has_nested_ ## Key<ImGuiKey_>::value, T>::type*)    \
-//         {                                                                                           \
-//             return -1;                                                                              \
-//         }                                                                                           \
-//     }
-
-// DECLARE_KEY_TESTER(ImGuiKey::ImGuiKey_F);
-// DECLARE_KEY_TESTER(ImGuiKey::ImGuiKey_D);
-
-// static inline int GetKeyIndexForF()
-// {
-//     return KeyTester_ImGuiKey_F::Get<ImGuiKey_>(nullptr);
-// }
-
-// static inline int GetKeyIndexForD()
-// {
-//     return KeyTester_ImGuiKey_D::Get<ImGuiKey_>(nullptr);
-// }
-// # else
-// static inline ImGuiKey GetKeyIndexForF()
-// {
-//     return ImGuiKey_F;
-// }
-
-// static inline ImGuiKey GetKeyIndexForD()
-// {
-//     return ImGuiKey_D;
-// }
-// # endif
+# if !defined(IMGUI_VERSION_NUM)
+#     error IMGUI_VERSION_NUM is not defined, please update Dear ImGui copy to at least 1.89 (August 2022)
+# elif IMGUI_VERSION_NUM < 18900
+#     error Please update Dear ImGui copy to at least 1.89 (August 2022)
+# endif
 
 } // namespace Detail
 } // namespace NodeEditor
@@ -129,11 +93,7 @@ static const float c_SelectionFadeOutDuration   = 0.15f; // seconds
 static const auto  c_MaxMoveOverEdgeSpeed       = 10.0f;
 static const auto  c_MaxMoveOverEdgeDistance    = 300.0f;
 
-#if IMGUI_VERSION_NUM > 18101
 static const auto  c_AllRoundCornersFlags = ImDrawFlags_RoundCornersAll;
-#else
-static const auto  c_AllRoundCornersFlags = 15;
-#endif
 
 
 //------------------------------------------------------------------------------
@@ -2564,7 +2524,7 @@ ed::Control ed::EditorContext::BuildControl(bool allowOffscreen)
 # if IMGUI_VERSION_NUM >= 18836
     if (m_IsHoveredWithoutOverlapp)
         ImGui::SetItemKeyOwner(ImGuiKey_MouseWheelY);
-# elif IMGUI_VERSION_NUM >= 17909
+# else
     if (m_IsHoveredWithoutOverlapp)
         ImGui::SetItemUsingMouseWheel();
 # endif
@@ -4399,17 +4359,17 @@ ed::EditorAction::AcceptResult ed::ShortcutAction::Accept(const Control& control
 
     Action candidateAction = None;
 
-    // auto& io = ImGui::GetIO();
-    // if (io.KeyCtrl && !io.KeyShift && !io.KeyAlt && ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_X)))
-    //     candidateAction = Cut;
-    // if (io.KeyCtrl && !io.KeyShift && !io.KeyAlt && ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_C)))
-    //     candidateAction = Copy;
-    // if (io.KeyCtrl && !io.KeyShift && !io.KeyAlt && ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_V)))
-    //     candidateAction = Paste;
-    // if (io.KeyCtrl && !io.KeyShift && !io.KeyAlt && ImGui::IsKeyPressed(ImGuiKey_D))
-    //     candidateAction = Duplicate;
-    // if (!io.KeyCtrl && !io.KeyShift && !io.KeyAlt && ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_Space)))
-    //     candidateAction = CreateNode;
+    //auto& io = ImGui::GetIO();
+    //if (io.KeyCtrl && !io.KeyShift && !io.KeyAlt && ImGui::IsKeyPressed(ImGuiKey_X))
+   //     candidateAction = Cut;
+    //if (io.KeyCtrl && !io.KeyShift && !io.KeyAlt && ImGui::IsKeyPressed(ImGuiKey_C))
+    //    candidateAction = Copy;
+    //if (io.KeyCtrl && !io.KeyShift && !io.KeyAlt && ImGui::IsKeyPressed(ImGuiKey_V))
+    //    candidateAction = Paste;
+    //if (io.KeyCtrl && !io.KeyShift && !io.KeyAlt && ImGui::IsKeyPressed(ImGuiKey_D))
+    //    candidateAction = Duplicate;
+    //if (!io.KeyCtrl && !io.KeyShift && !io.KeyAlt && ImGui::IsKeyPressed(ImGuiKey_Space))
+    //    candidateAction = CreateNode;
 
     if (candidateAction != None)
     {
@@ -4745,14 +4705,14 @@ bool ed::CreateItemAction::Begin()
 {
     IM_ASSERT(false == m_InActive);
 
+    if (m_NextStage == None)
+        return false;
+
     m_InActive        = true;
     m_CurrentStage    = m_NextStage;
     m_UserAction      = Unknown;
     m_LinkColor       = IM_COL32_WHITE;
     m_LinkThickness   = 1.0f;
-
-    if (m_CurrentStage == None)
-        return false;
 
     m_LastChannel = Editor->GetDrawList()->_Splitter._Current;
 
@@ -4761,7 +4721,7 @@ bool ed::CreateItemAction::Begin()
 
 void ed::CreateItemAction::End()
 {
-    IM_ASSERT(m_InActive);
+    IM_ASSERT(m_InActive && "Please call End() only when Begin() was successful");
 
     if (m_IsInGlobalSpace)
     {
@@ -4962,7 +4922,7 @@ ed::EditorAction::AcceptResult ed::DeleteItemsAction::Accept(const Control& cont
         return False;
 
     auto& io = ImGui::GetIO();
-/*     if (Editor->CanAcceptUserInput() && ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_Delete)) && Editor->AreShortcutsEnabled())
+    /*if (Editor->CanAcceptUserInput() && ImGui::IsKeyPressed(ImGuiKey_Delete) && Editor->AreShortcutsEnabled())
     {
         auto& selection = Editor->GetSelectedObjects();
         if (!selection.empty())
